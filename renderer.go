@@ -11,9 +11,6 @@ import (
 	"image"
 	"image/color"
 	"image/draw"
-	"io/ioutil"
-	"os"
-	"path/filepath"
 	"strings"
 )
 
@@ -42,17 +39,10 @@ func NewRenderer() Renderer {
 	)
 
 	// init font
-	ex, err := os.Executable()
-	if err != nil {
-		panic(err)
-	}
-	exPath := filepath.Dir(ex)
-	fontPath, err := filepath.Abs(exPath + "/assets/FiraCode-Regular.ttf")
-	onError(err)
-	fontBytes, err := ioutil.ReadFile(fontPath)
-	onError(err)
+	fontBytes, err := Asset("assets/FiraCode-Regular.ttf")
+	checkError(err)
 	customFont, err := freetype.ParseFont(fontBytes)
-	onError(err)
+	checkError(err)
 
 	style := styles.Get("monokai")
 
@@ -162,7 +152,7 @@ func (s *Renderer) Render(contents, lang string) *image.RGBA {
 	}
 
 	iterator, err := lexer.Tokenise(nil, contents)
-	onError(err)
+	checkError(err)
 	tokens := iterator.Tokens()
 
 	appendX := 0.0

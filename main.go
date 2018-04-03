@@ -19,7 +19,7 @@ func main() {
 	var style string
 
 	home, err := homedir.Dir()
-	onError(err)
+	checkError(err)
 
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
@@ -47,7 +47,7 @@ func main() {
 	app.Action = func(c *cli.Context) error {
 
 		contents, err := ioutil.ReadFile(os.Args[1])
-		onError(err)
+		checkError(err)
 
 		if language == "auto" {
 			language = "match:" + os.Args[1]
@@ -56,7 +56,7 @@ func main() {
 		renderer.ChangeStyle(style)
 		rgba := renderer.Render(string(contents), language)
 		f, err := os.Create(out)
-		onError(err)
+		checkError(err)
 
 		png.Encode(f, rgba)
 
@@ -69,7 +69,7 @@ func main() {
 	}
 }
 
-func onError(err error) {
+func checkError(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
