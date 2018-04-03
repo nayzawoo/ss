@@ -12,59 +12,57 @@ import (
 func main() {
 	app := cli.NewApp()
 	app.Name = "Code Screenshot"
-	app.Usage = "ss [filepath]"
-
-	var language string
-	var out string
-	var style string
+	app.Usage = "ss <options> [sourcecode]"
 
 	home, err := homedir.Dir()
 	checkError(err)
 
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
-			Name:        "lang, l",
-			Value:       "auto",
-			Usage:       "Language",
-			Destination: &language,
+			Name:  "lang, l",
+			Value: "auto",
+			Usage: "`LANGUAGE`",
 		},
 		cli.StringFlag{
-			Name:        "output, o",
-			Value:       "home",
-			Usage:       "Output File",
-			Destination: &out,
+			Name:  "output, o",
+			Value: "home",
+			Usage: "Output `FILE`",
 		},
 		cli.StringFlag{
-			Name:        "style, s",
-			Value:       "monokai",
-			Usage:       "Theme Style",
-			Destination: &style,
+			Name:  "style, s",
+			Value: "monokai",
+			Usage: "Theme `STYLE`",
 		},
 	}
 
 	renderer := NewRenderer()
 
 	app.Action = func(c *cli.Context) error {
-		if c.NArg() < 1 {
+		if len(os.Args) == 1 {
 			cli.ShowAppHelp(c)
 			os.Exit(0)
 		}
 
-		contents, err := ioutil.ReadFile(os.Args[1])
+		lang := c.String("lang")
+		style := c.String("style")
+		output := c.String("output")
+
+		filePath := c.Args().Get(0)
+		contents, err := ioutil.ReadFile(filePath)
 		checkError(err)
 
-		if language == "auto" {
-			language = "match:" + os.Args[1]
+		if lang == "auto" {
+			lang = "match:" + filePath
 		}
 
 		renderer.ChangeStyle(style)
-		rgba := renderer.Render(string(contents), language)
+		rgba := renderer.Render(string(contents), lang)
 
-		if out == "home" {
-			out = home + "/code_screenshot.png"
+		if output == "home" {
+			output = home + "/code_screenshot.png"
 		}
 
-		f, err := os.Create(out)
+		f, err := os.Create(output)
 		checkError(err)
 
 		png.Encode(f, rgba)

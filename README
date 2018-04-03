@@ -7,7 +7,7 @@ go get github.com/nayzawoo/ss
 Usage
 
 NAME:
-   Code Screenshot - ss [filepath]
+   Code Screenshot - ss <options> [sourcecode]
 
 USAGE:
    ss [global options] command [command options] [arguments...]
@@ -19,8 +19,12 @@ COMMANDS:
      help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --lang value, -l value    Language (default: "auto")
-   --output value, -o value  Output File (default: "home")
-   --style value, -s value   Theme Style (default: "monokai")
-   --help, -h                show help
-   --version, -v             print the version
+   --lang LANGUAGE, -l LANGUAGE  LANGUAGE (default: "auto")
+   --output FILE, -o FILE        Output FILE (default: "home")
+   --style STYLE, -s STYLE       Theme STYLE (default: "monokai")
+   --help, -h                    show help
+   --version, -v                 print the version
+
+
+Available Styles: https://github.com/alecthomas/chroma/tree/master/styles
+Available Languages: https://github.com/alecthomas/chroma/tree/master/lexers
