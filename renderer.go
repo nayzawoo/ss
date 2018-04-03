@@ -12,6 +12,7 @@ import (
 	"image/color"
 	"image/draw"
 	"io/ioutil"
+	"path/filepath"
 	"strings"
 )
 
@@ -40,7 +41,9 @@ func NewRenderer() Renderer {
 	)
 
 	// init font
-	fontBytes, err := ioutil.ReadFile("./assets/FiraCode-Regular.ttf")
+	fontPath, err := filepath.Abs("./assets/FiraCode-Regular.ttf")
+	onError(err)
+	fontBytes, err := ioutil.ReadFile(fontPath)
 	onError(err)
 	customFont, err := freetype.ParseFont(fontBytes)
 	onError(err)
