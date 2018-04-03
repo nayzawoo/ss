@@ -11,8 +11,8 @@ import (
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "Code Screen Shooter"
-	app.Usage = "[filepath]"
+	app.Name = "Code Screenshot"
+	app.Usage = "ss [filepath]"
 
 	var language string
 	var out string
@@ -30,7 +30,7 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:        "output, o",
-			Value:       home + "/code_screenshot.png",
+			Value:       "home",
 			Usage:       "Output File",
 			Destination: &out,
 		},
@@ -45,6 +45,10 @@ func main() {
 	renderer := NewRenderer()
 
 	app.Action = func(c *cli.Context) error {
+		if c.NArg() < 1 {
+			cli.ShowAppHelp(c)
+			os.Exit(0)
+		}
 
 		contents, err := ioutil.ReadFile(os.Args[1])
 		checkError(err)
@@ -55,6 +59,11 @@ func main() {
 
 		renderer.ChangeStyle(style)
 		rgba := renderer.Render(string(contents), language)
+
+		if out == "home" {
+			out = home + "/code_screenshot.png"
+		}
+
 		f, err := os.Create(out)
 		checkError(err)
 
@@ -63,7 +72,7 @@ func main() {
 		return nil
 	}
 
-	err = app.Run(os.Args[1:])
+	err = app.Run(os.Args)
 	if err != nil {
 		log.Fatal(err)
 	}
