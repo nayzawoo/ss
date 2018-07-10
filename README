@@ -28,3 +28,13 @@ GLOBAL OPTIONS:
 
 Available Styles: https://github.com/alecthomas/chroma/tree/master/styles
 Available Languages: https://github.com/alecthomas/chroma/tree/master/lexers
+
+
+```
+ss -o ./example.png -s vim -l jsx dummy/code.jsx
+```
+
+output
+
+![alt text](example.png)
+
